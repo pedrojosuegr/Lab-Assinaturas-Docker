@@ -1,0 +1,5 @@
+RELATORIO DE AUDITORIA - LABORATORIO DE CRIPTOGRAFIA APLICADA
+
+Sistema auditado: portal de emissao de historicos escolares.
+Resultado: nenhuma nao conformidade critica encontrada.
+Recomendacao: substituir assinaturas RSA PKCS#1 v1.5 por RSA-PSS ou Ed25519.

@@ -1,0 +1,49 @@
+# Configuração da AC Intermediária do laboratório
+# A variável PKI_DIR é definida pelos scripts (saida/pki).
+
+[ ca ]
+default_ca        = AC_Inter
+
+[ AC_Inter ]
+dir               = $ENV::PKI_DIR/inter
+database          = $dir/index.txt
+serial            = $dir/serial
+crlnumber         = $dir/crlnumber
+new_certs_dir     = $dir/emitidos
+certificate       = $dir/inter.crt
+private_key       = $dir/inter.key
+default_md        = sha256
+default_days      = 365
+default_crl_days  = 30
+policy            = politica_lab
+unique_subject    = no
+copy_extensions   = none
+
+[ politica_lab ]
+countryName       = optional
+organizationName  = optional
+commonName        = supplied
+
+[ req ]
+distinguished_name = dn_vazio
+prompt            = no
+
+[ dn_vazio ]
+CN = preenchido-via-subj
+
+# ---------------------------------------------------------------- T5
+[ v3_servidor ]
+basicConstraints       = critical, CA:FALSE
+keyUsage               = critical, digitalSignature
+extendedKeyUsage       = serverAuth
+subjectAltName         = DNS:web.lab.local
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always
+
+# ---------------------------------------------------------------- T7
+[ v3_cliente ]
+# TODO: basicConstraints       = 
+# TODO: keyUsage               = 
+# TODO: extendedKeyUsage       = 
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always

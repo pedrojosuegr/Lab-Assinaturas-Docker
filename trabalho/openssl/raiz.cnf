@@ -1,0 +1,47 @@
+# Configuração da AC Raiz do laboratório (usada pelos comandos "openssl req" e "openssl ca")
+# A variável PKI_DIR é definida pelos scripts (saida/pki).
+
+[ ca ]
+default_ca        = AC_Raiz
+
+[ AC_Raiz ]
+dir               = $ENV::PKI_DIR/raiz
+database          = $dir/index.txt          # registro de tudo o que a AC emitiu ou revogou
+serial            = $dir/serial             # próximo número de série
+crlnumber         = $dir/crlnumber          # próximo número de LCR
+new_certs_dir     = $dir/emitidos           # cópia de cada certificado emitido
+certificate       = $dir/raiz.crt
+private_key       = $dir/raiz.key
+default_md        = sha384
+default_days      = 1825
+default_crl_days  = 30
+policy            = politica_lab
+unique_subject    = no
+copy_extensions   = none                    # a AC não copia extensões pedidas no CSR
+
+[ politica_lab ]
+countryName       = optional
+organizationName  = optional
+commonName        = supplied
+
+[ req ]
+distinguished_name = dn_vazio
+prompt            = no
+
+[ dn_vazio ]
+CN = preenchido-via-subj
+
+# ---------------------------------------------------------------- T3
+[ v3_ac_raiz ]
+[ v3_ac_raiz ]
+basicConstraints       = critical, CA:TRUE
+keyUsage               = critical, keyCertSign, cRLSign
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always
+
+# ---------------------------------------------------------------- T4
+[ v3_ac_inter ]
+basicConstraints       = critical, CA:TRUE, pathlen:0
+keyUsage               = critical, keyCertSign, cRLSign
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always

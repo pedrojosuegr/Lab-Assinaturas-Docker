@@ -1,0 +1,49 @@
+# Laboratório de Assinaturas Digitais e Certificados — Criptografia Aplicada (PUC Goiás)
+#
+#   docker compose up -d --build           -> constrói a imagem e sobe o contêiner de ferramentas
+#   docker compose exec ferramentas bash   -> abre um terminal dentro do contêiner
+#   docker compose up -d web               -> sobe o servidor HTTPS (a partir da T6)
+#   docker compose restart web             -> recarrega o nginx após alterar certificados ou configuração
+#   docker compose run --rm corretor       -> executa a correção automática
+#   docker compose down                    -> encerra tudo
+
+name: lab-assinaturas
+
+services:
+  ferramentas:
+    build: ./imagem
+    image: lab-assinaturas/ferramentas:1.0
+    container_name: lab-ferramentas
+    working_dir: /lab/trabalho
+    volumes:
+      - ./trabalho:/lab/trabalho
+      - ./materiais:/lab/materiais:ro
+    stdin_open: true
+    tty: true
+    command: bash
+    networks: [lab]
+
+  web:
+    image: nginx:1.27-alpine
+    container_name: lab-web
+    volumes:
+      - ./trabalho/web:/etc/nginx/conf.d:ro          # configuração do site (lab.conf)
+      - ./trabalho/saida/web:/etc/nginx/lab:ro       # certificados, chave, CRL e página
+    networks:
+      lab:
+        aliases: [web.lab.local]
+    profiles: [web]
+
+  corretor:
+    image: lab-assinaturas/ferramentas:1.0
+    working_dir: /lab
+    volumes:
+      - ./trabalho:/lab/trabalho
+      - ./materiais:/lab/materiais:ro
+      - ./corretor:/lab/corretor:ro
+    command: python3 /lab/corretor/corrigir.py
+    networks: [lab]
+    profiles: [corretor]
+
+networks:
+  lab: {}
