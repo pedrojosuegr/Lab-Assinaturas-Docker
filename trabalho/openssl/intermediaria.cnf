@@ -42,8 +42,8 @@ authorityKeyIdentifier = keyid:always
 
 # ---------------------------------------------------------------- T7
 [ v3_cliente ]
-# TODO: basicConstraints       = 
-# TODO: keyUsage               = 
-# TODO: extendedKeyUsage       = 
+basicConstraints       = critical, CA:FALSE
+keyUsage               = critical, digitalSignature, nonRepudiation
+extendedKeyUsage       = clientAuth, emailProtection
 subjectKeyIdentifier   = hash
 authorityKeyIdentifier = keyid:always

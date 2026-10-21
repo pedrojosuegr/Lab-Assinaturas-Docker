@@ -4,11 +4,21 @@
 source "$(dirname "$0")/_comum.sh"
 I="$PKI_DIR/inter"
 C=saida/clientes
-mkdir -p "$C"
+mkdir -p "$C" saida/web
 
-# TODO: chave (P-256) em $C/aluno.key, CSR com titular "/C=BR/O=$ORG/CN=$MATRICULA"
-#       e certificado $C/aluno.crt emitido pela intermediária (extensões v3_cliente, 365 dias)
+# Chave (P-256), CSR e certificado do aluno, emitido pela intermediária (extensões v3_cliente, 365 dias)
+openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:P-256 -out "$C/aluno.key"
+chmod 600 "$C/aluno.key"
 
-# TODO: saida/web/acs-confiaveis.pem = certificado da raiz seguido do certificado da intermediária
+openssl req -new -config openssl/intermediaria.cnf \
+  -key "$C/aluno.key" \
+  -subj "/C=BR/O=$ORG/CN=$MATRICULA" \
+  -out "$I/aluno.csr"
+
+openssl ca -batch -notext -config openssl/intermediaria.cnf -extensions v3_cliente -days 365 \
+  -in "$I/aluno.csr" -out "$C/aluno.crt"
+
+# ACs aceitas pelo nginx para certificados de cliente: raiz seguida da intermediária
+cat "$PKI_DIR/raiz/raiz.crt" "$I/inter.crt" > saida/web/acs-confiaveis.pem
 
 openssl verify -CAfile "$PKI_DIR/raiz/raiz.crt" -untrusted "$I/inter.crt" -purpose sslclient "$C/aluno.crt"
