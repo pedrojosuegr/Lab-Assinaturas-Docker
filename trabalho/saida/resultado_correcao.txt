@@ -1,0 +1,25 @@
+==============================================================================
+CORREÇÃO AUTOMÁTICA — Assinaturas Digitais e Certificados (Docker)
+Matrícula: 20241002802006   Nome: Felipe Augustob Diniz Borges
+Data: 22/10/2026 00:58
+==============================================================================
+[PENDENTE] T1 (10%) Assinatura de arquivo (RSA-PSS e ECDSA)
+           arquivo não encontrado: saida/t1/rsa.key
+[OK]       T2 (10%) Verificação de lote de atualizações
+           7 autênticos no lote fornecido; lote novo também correto
+[OK]       T3 (12%) AC Raiz
+           raiz P-384, autoassinada, CA:TRUE, keyCertSign/cRLSign
+[OK]       T4 (12%) AC Intermediária
+           intermediária P-256, CA:TRUE, pathlen:0, assinada pela raiz
+[OK]       T5 (14%) Certificado do servidor
+           servidor web.lab.local, serverAuth, 90 dias, cadeia completa
+[OK]       T6 (12%) HTTPS no nginx
+           https://web.lab.local/ aceito com a raiz do aluno
+[OK]       T7 (10%) Autenticação mútua (mTLS)
+           cliente aceito; sem certificado e com AC desconhecida, negado
+[OK]       T8 (10%) Revogação e LCR
+           revogado negado (400); aluno aceito
+[OK]       T9 (10%) Documento assinado em CMS (.p7s)
+           CMS destacado, assinante aluno.crt, cadeia até a raiz
+------------------------------------------------------------------------------
+Percentual concluído: 90%  (conferência automática; a avaliação final é do professor)
